@@ -31,7 +31,7 @@ const Velox = props => {
   // watch location and get infos
   Geolocation.watchPosition(
     info => {
-      setVelocity(parseInt( (info.coords.speed * 3.7) + 0));
+      setVelocity(parseInt( (info.coords.speed * 3.7) + 33));
       audio.play();
       console.log(velocity);
     },
