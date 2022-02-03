@@ -19,6 +19,7 @@ audio.play();
 audio.setVolume(0.0);
 
 const Velox = props => {
+  // states used in component
   const [velocity, setVelocity] = useState(0);
 
   // Keep screen waked up
@@ -43,28 +44,34 @@ const Velox = props => {
   );
 
   /**
-   * Set device when list is ok
+   * Set setVolume when velocity changes
    * @return {void}
    */
   useEffect(() => {
-    audio.setVolume(setVolume(velocity));
+    audio.setVolume(
+      getVolume(velocity)
+    );
   }, [velocity]);
 
   /**
+   * Manual increase velocity
    * @param  {} increment
    * @return {void}}
    */
   function increaseVel(increment) {
     audio.play();
     setVelocity(velocity + increment);
-    audio.setVolume(setVolume(velocity));
+    audio.setVolume(
+      getVolume(velocity)
+    );
   }
+
   /**
    * Set volume of audio
    * @param  {} speed=0
    * @return volume
    */
-  function setVolume(speed = 0) {
+  function getVolume(speed = 0) {
     var volume = 0;
     if (speed > 60) {
       speed = 60;

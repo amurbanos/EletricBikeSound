@@ -1,5 +1,4 @@
 import React from 'react';
-import {Node} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {
   Colors,
@@ -11,7 +10,7 @@ import {LogBox} from 'react-native';
 LogBox.ignoreLogs(['new NativeEventEmitter']);
 LogBox.ignoreAllLogs();
 
-const App: () => Node = () => {
+const App = () => {
   return (
     <>
       <View style={styles.logoContainer}>
