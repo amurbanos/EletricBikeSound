@@ -1,17 +1,15 @@
 import React from 'react';
-import type {Node} from 'react';
-import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
+import {Node} from 'react';
+import {StyleSheet, View} from 'react-native';
 import {
   Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import SplashScreen from 'react-native-splash-screen';
-
 import Velox from './components/Velox';
 import Logo from './components/Logo';
+import {LogBox} from 'react-native';
+
+LogBox.ignoreLogs(['new NativeEventEmitter']);
+LogBox.ignoreAllLogs();
 
 const App: () => Node = () => {
   return (

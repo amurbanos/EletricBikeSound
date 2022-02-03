@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
-import {LogBox} from 'react-native';
 import Speedometer, {
   Background,
   Arc,
@@ -12,9 +11,6 @@ import Geolocation from '@react-native-community/geolocation';
 import {Button} from 'react-native-elements';
 import SoundPlayer from 'react-native-sound-player';
 import IdleTimerManager from 'react-native-idle-timer';
-
-LogBox.ignoreLogs(['new NativeEventEmitter']);
-LogBox.ignoreAllLogs();
 
 var audio = SoundPlayer;
 
@@ -31,7 +27,7 @@ const Velox = props => {
   // watch location and get infos
   Geolocation.watchPosition(
     info => {
-      setVelocity(parseInt( (info.coords.speed * 3.7) + 33));
+      setVelocity(parseInt( (info.coords.speed * 3.7) + 0));
       audio.play();
       console.log(velocity);
     },
@@ -64,7 +60,7 @@ const Velox = props => {
     audio.setVolume(setVolume(velocity));
   }
   /**
-   * Set v
+   * Set volume of audio
    * @param  {} speed=0
    * @return volume
    */
