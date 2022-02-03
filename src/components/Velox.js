@@ -11,16 +11,20 @@ import Geolocation from '@react-native-community/geolocation';
 import {Button} from 'react-native-elements';
 import IdleTimerManager from 'react-native-idle-timer';
 import Sound from 'react-native-sound';
+import { PermissionsAndroid } from 'react-native';
+
 
 Sound.setCategory('Playback');
 
-var audio = new Sound('moto.wav', Sound.MAIN_BUNDLE, (error) => {
+var audio = new Sound('moto.mp3', Sound.MAIN_BUNDLE, (error) => {
   audio.play((success) => {
   });
   audio.setVolume(0.1);
   audio.setSpeed(1);
   audio.setNumberOfLoops(-1);
 });
+
+
 
 const Velox = props => {
   // states used in component
@@ -29,21 +33,38 @@ const Velox = props => {
   // Keep screen waked up
   IdleTimerManager.setIdleTimerDisabled(true);
 
+  async function requestLocationPermission() 
+  {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION      
+      )
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        watchPosition();
+      }
+    } catch (err) {
+      console.warn(err)
+    }
+  }
+  requestLocationPermission();
+
   // watch location and get infos
-  Geolocation.watchPosition(
-    info => {
-      setVelocity(parseInt( (info.coords.speed * 3.7) + 0));
-    },
-    error => {
-      console.log(error);
-    },
-    {
-      maximumAge: 1000,
-      timeout: 100,
-      enableHighAccuracy: true,
-      distanceFilter: 0
-    },
-  );
+  function watchPosition(){
+    Geolocation.watchPosition(
+      info => {
+        setVelocity(parseInt( (info.coords.speed * 3.7) + 0));
+      },
+      error => {
+        console.log(error);
+      },
+      {
+        maximumAge: 1000,
+        timeout: 100,
+        enableHighAccuracy: true,
+        distanceFilter: 0
+      },
+    ); 
+  }
 
   /**
    * Set setVolume when velocity changes
