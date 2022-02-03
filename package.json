@@ -16,6 +16,7 @@
     "react-native-cool-speedometer": "^1.0.8",
     "react-native-elements": "^3.4.2",
     "react-native-idle-timer": "^2.1.7",
+    "react-native-sound": "^0.11.2",
     "react-native-sound-player": "^0.11.1",
     "react-native-splash-screen": "^3.3.0",
     "react-native-svg": "^12.1.1",

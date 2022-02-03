@@ -9,14 +9,18 @@ import Speedometer, {
 } from 'react-native-cool-speedometer';
 import Geolocation from '@react-native-community/geolocation';
 import {Button} from 'react-native-elements';
-import SoundPlayer from 'react-native-sound-player';
 import IdleTimerManager from 'react-native-idle-timer';
+import Sound from 'react-native-sound';
 
-var audio = SoundPlayer;
+Sound.setCategory('Playback');
 
-audio.loadSoundFile('moto', 'wav');
-audio.play();
-audio.setVolume(0.0);
+var audio = new Sound('moto.wav', Sound.MAIN_BUNDLE, (error) => {
+  audio.play((success) => {
+  });
+  audio.setVolume(0.1);
+  audio.setSpeed(1);
+  audio.setNumberOfLoops(-1);
+});
 
 const Velox = props => {
   // states used in component
@@ -29,7 +33,6 @@ const Velox = props => {
   Geolocation.watchPosition(
     info => {
       setVelocity(parseInt( (info.coords.speed * 3.7) + 0));
-      audio.play();
       console.log(velocity);
     },
     error => {
@@ -51,6 +54,9 @@ const Velox = props => {
     audio.setVolume(
       getVolume(velocity)
     );
+    audio.setSpeed(
+      getAudioSpeed(velocity)
+    );
   }, [velocity]);
 
   /**
@@ -59,11 +65,13 @@ const Velox = props => {
    * @return {void}}
    */
   function increaseVel(increment) {
-    audio.play();
     setVelocity(velocity + increment);
     audio.setVolume(
       getVolume(velocity)
     );
+    audio.setSpeed(
+      getAudioSpeed(velocity)
+    );    
   }
 
   /**
@@ -71,7 +79,7 @@ const Velox = props => {
    * @param  {} speed=0
    * @return volume
    */
-  function getVolume(speed = 0) {
+   function getVolume(speed = 0) {
     var volume = 0;
     if (speed > 60) {
       speed = 60;
@@ -80,7 +88,24 @@ const Velox = props => {
       speed = 6;
     }
     volume = speed / 60;
-    return volume;
+    return volume * 2;
+  }
+
+  /**
+   * Set speed of audio
+   * @param  {} speed=0
+   * @return volume
+   */
+   function getAudioSpeed(speed = 0) {
+    var audioSpeed = 0;
+    if (speed > 60) {
+      speed = 60;
+    }
+    if (speed < 6) {
+      speed = 10;
+    }
+    audioSpeed = speed / 10;
+    return audioSpeed;
   }
 
   return (
