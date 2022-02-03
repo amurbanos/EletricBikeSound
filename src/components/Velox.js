@@ -33,14 +33,13 @@ const Velox = props => {
   Geolocation.watchPosition(
     info => {
       setVelocity(parseInt( (info.coords.speed * 3.7) + 0));
-      console.log(velocity);
     },
     error => {
       console.log(error);
     },
     {
       maximumAge: 1000,
-      timeout: 1000,
+      timeout: 100,
       enableHighAccuracy: true,
       distanceFilter: 0
     },
@@ -57,6 +56,7 @@ const Velox = props => {
     audio.setSpeed(
       getAudioSpeed(velocity)
     );
+    console.log(velocity);
   }, [velocity]);
 
   /**
@@ -65,13 +65,7 @@ const Velox = props => {
    * @return {void}}
    */
   function increaseVel(increment) {
-    setVelocity(velocity + increment);
-    audio.setVolume(
-      getVolume(velocity)
-    );
-    audio.setSpeed(
-      getAudioSpeed(velocity)
-    );    
+    setVelocity(velocity + increment);   
   }
 
   /**
@@ -88,7 +82,7 @@ const Velox = props => {
       speed = 6;
     }
     volume = speed / 60;
-    return volume * 2;
+    return volume;
   }
 
   /**
@@ -129,25 +123,15 @@ const Velox = props => {
       </View>
       <View>
         <Button
-          title={'Aumentar'}
+          title={'Subir giro'}
           containerStyle={{
-            width: 200,
+            width: 220,
             marginHorizontal: 50,
             marginBottom: 10,
             marginTop: 30,
           }}
           onPress={() => {
-            increaseVel(5);
-          }}
-        />
-        <Button
-          title={'Reduzir'}
-          containerStyle={{
-            width: 200,
-            marginHorizontal: 50,
-          }}
-          onPress={() => {
-            increaseVel(-5);
+            increaseVel(7);
           }}
         />
       </View>
