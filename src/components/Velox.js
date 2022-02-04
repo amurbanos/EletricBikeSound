@@ -1,32 +1,34 @@
 import React, {useState, useEffect} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
-import Speedometer, {
+import {
   Background,
   Arc,
   Needle,
   Progress,
   Marks,
 } from 'react-native-cool-speedometer';
+import Speedometer from 'react-native-cool-speedometer';
 import Geolocation from '@react-native-community/geolocation';
 import {Button} from 'react-native-elements';
 import IdleTimerManager from 'react-native-idle-timer';
 import Sound from 'react-native-sound';
-import PermissionsAndroid from 'react-native';
-
+import {PermissionsAndroid} from 'react-native';
+import {BackHandler} from 'react-native';
 
 Sound.setCategory('Playback');
 
-var audio = new Sound('moto.mp3', Sound.MAIN_BUNDLE, (error) => {
-  audio.play((success) => {
-  });
+var audio = new Sound('moto.mp3', Sound.MAIN_BUNDLE, error => {
+  audio.play(success => {});
   audio.setVolume(0.1);
   audio.setSpeed(1);
-  audio.setNumberOfLoops(-1); 
+  audio.setNumberOfLoops(-1);
 });
 
 const Velox = props => {
   // states used in component
   const [velocity, setVelocity] = useState(0);
+  const [maxVelocity, setMaxVelocity] = useState(60);
+  const [minVelocity, setMinelocity] = useState(6);
 
   // Keep screen waked up
   IdleTimerManager.setIdleTimerDisabled(true);
@@ -35,16 +37,16 @@ const Velox = props => {
    * request fine location
    * @return {void}
    */
-  async function requestLocationPermission() 
-  {
+  async function requestLocationPermission() {
     try {
       const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         watchPosition();
-      }else{
-        console.log('sem permissao');
+      } else {
+        audio.stop();
+        BackHandler.exitApp();
       }
     } catch (err) {
       console.warn(err);
@@ -56,10 +58,10 @@ const Velox = props => {
    * watch position all the time
    * @return {void}
    */
-  function watchPosition(){
+  function watchPosition() {
     Geolocation.watchPosition(
       info => {
-        setVelocity(parseInt((info.coords.speed * 3.7))
+        setVelocity(parseInt(info.coords.speed * 3.7, 10));
       },
       error => {
         console.log(error);
@@ -68,9 +70,9 @@ const Velox = props => {
         maximumAge: 1000,
         timeout: 100,
         enableHighAccuracy: true,
-        distanceFilter: 0
+        distanceFilter: 0,
       },
-    ); 
+    );
   }
 
   /**
@@ -78,12 +80,8 @@ const Velox = props => {
    * @return {void}
    */
   useEffect(() => {
-    audio.setVolume(
-      getVolume(velocity)
-    );
-    audio.setSpeed(
-      getAudioSpeed(velocity)
-    );
+    audio.setVolume(getVolume(velocity));
+    audio.setSpeed(getAudioSpeed(velocity));
     console.log(velocity);
   }, [velocity]);
 
@@ -93,7 +91,7 @@ const Velox = props => {
    * @return {void}}
    */
   function increaseVel(increment) {
-    setVelocity(velocity + increment);   
+    setVelocity(velocity + increment);
   }
 
   /**
@@ -101,14 +99,10 @@ const Velox = props => {
    * @param  {} speed=0
    * @return volume
    */
-   function getVolume(speed = 0) {
+  function getVolume(speed = 0) {
     var volume = 0;
-    if (speed > 60) {
-      speed = 60;
-    }
-    if (speed < 6) {
-      speed = 6;
-    }
+    speed = speed > maxVelocity ? maxVelocity : speed;
+    speed = speed < minVelocity ? minVelocity : speed;
     volume = speed / 60;
     return volume;
   }
@@ -118,7 +112,7 @@ const Velox = props => {
    * @param  {} speed=0
    * @return volume
    */
-   function getAudioSpeed(speed = 0) {
+  function getAudioSpeed(speed = 0) {
     var audioSpeed = 0;
     if (speed > 60) {
       speed = 60;
@@ -152,12 +146,7 @@ const Velox = props => {
       <View>
         <Button
           title={'Subir giro'}
-          containerStyle={{
-            width: 220,
-            marginHorizontal: 50,
-            marginBottom: 10,
-            marginTop: 30,
-          }}
+          containerStyle={styles.rpmButton}
           onPress={() => {
             increaseVel(7);
           }}
@@ -178,6 +167,12 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 24,
     textAlign: 'right',
+  },
+  rpmButton: {
+    width: 220,
+    marginHorizontal: 50,
+    marginBottom: 10,
+    marginTop: 30,
   },
 });
 
