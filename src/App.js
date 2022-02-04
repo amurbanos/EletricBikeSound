@@ -1,8 +1,6 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {
-  Colors,
-} from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Velox from './components/Velox';
 import Logo from './components/Logo';
 import {LogBox} from 'react-native';

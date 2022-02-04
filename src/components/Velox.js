@@ -11,7 +11,7 @@ import Geolocation from '@react-native-community/geolocation';
 import {Button} from 'react-native-elements';
 import IdleTimerManager from 'react-native-idle-timer';
 import Sound from 'react-native-sound';
-import { PermissionsAndroid } from 'react-native';
+import PermissionsAndroid from 'react-native';
 
 
 Sound.setCategory('Playback');
@@ -21,10 +21,8 @@ var audio = new Sound('moto.mp3', Sound.MAIN_BUNDLE, (error) => {
   });
   audio.setVolume(0.1);
   audio.setSpeed(1);
-  audio.setNumberOfLoops(-1);
+  audio.setNumberOfLoops(-1); 
 });
-
-
 
 const Velox = props => {
   // states used in component
@@ -33,26 +31,35 @@ const Velox = props => {
   // Keep screen waked up
   IdleTimerManager.setIdleTimerDisabled(true);
 
+  /**
+   * request fine location
+   * @return {void}
+   */
   async function requestLocationPermission() 
   {
     try {
       const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION      
-      )
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+      );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         watchPosition();
+      }else{
+        console.log('sem permissao');
       }
     } catch (err) {
-      console.warn(err)
+      console.warn(err);
     }
   }
   requestLocationPermission();
 
-  // watch location and get infos
+  /**
+   * watch position all the time
+   * @return {void}
+   */
   function watchPosition(){
     Geolocation.watchPosition(
       info => {
-        setVelocity(parseInt( (info.coords.speed * 3.7) + 0));
+        setVelocity(parseInt((info.coords.speed * 3.7))
       },
       error => {
         console.log(error);
