@@ -1,5 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  BackHandler,
+  PermissionsAndroid,
+} from 'react-native';
 import {
   Background,
   Arc,
@@ -12,15 +18,14 @@ import Geolocation from '@react-native-community/geolocation';
 import {Button} from 'react-native-elements';
 import IdleTimerManager from 'react-native-idle-timer';
 import Sound from 'react-native-sound';
-import {PermissionsAndroid} from 'react-native';
-import {BackHandler} from 'react-native';
 
+// set sound object
 Sound.setCategory('Playback');
 
 var audio = new Sound('moto.mp3', Sound.MAIN_BUNDLE, error => {
   audio.play(success => {});
   audio.setVolume(0.1);
-  audio.setSpeed(1);
+  audio.setSpeed(0.6);
   audio.setNumberOfLoops(-1);
 });
 
