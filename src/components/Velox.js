@@ -103,7 +103,7 @@ const Velox = props => {
     var volume = 0;
     speed = speed > maxVelocity ? maxVelocity : speed;
     speed = speed < minVelocity ? minVelocity : speed;
-    volume = speed / 60;
+    volume = speed / maxVelocity;
     return volume;
   }
 
@@ -114,12 +114,8 @@ const Velox = props => {
    */
   function getAudioSpeed(speed = 0) {
     var audioSpeed = 0;
-    if (speed > 60) {
-      speed = 60;
-    }
-    if (speed < 6) {
-      speed = 10;
-    }
+    speed = speed > maxVelocity ? maxVelocity : speed;
+    speed = speed < minVelocity ? minVelocity : speed;
     audioSpeed = speed / 10;
     return audioSpeed;
   }
