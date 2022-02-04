@@ -25,7 +25,7 @@ Sound.setCategory('Playback');
 var audio = new Sound('moto.mp3', Sound.MAIN_BUNDLE, error => {
   audio.play(success => {});
   audio.setVolume(0.1);
-  audio.setSpeed(0.6);
+  audio.setSpeed(1);
   audio.setNumberOfLoops(-1);
 });
 
