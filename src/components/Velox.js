@@ -54,7 +54,6 @@ const Velox = props => {
         BackHandler.exitApp();
       }
     } catch (err) {
-      console.warn(err);
     }
   }
   requestLocationPermission();
@@ -68,9 +67,7 @@ const Velox = props => {
       info => {
         setVelocity(parseInt(info.coords.speed * 3.7, 10));
       },
-      error => {
-        console.log(error);
-      },
+      error => {      },
       {
         maximumAge: 1000,
         timeout: 100,
@@ -87,7 +84,6 @@ const Velox = props => {
   useEffect(() => {
     audio.setVolume(getVolume(velocity));
     audio.setSpeed(getAudioSpeed(velocity));
-    console.log(velocity);
   }, [velocity]);
 
   /**
